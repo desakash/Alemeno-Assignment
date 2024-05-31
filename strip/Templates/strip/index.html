@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urine Strip Color Analyzer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.15/tailwind.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333333;
+        }
+        .upload-form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #result {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .color-square {
+            width: 30px;
+            height: 30px;
+            display: inline-block;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-3xl font-bold">Upload Urine Strip Image</h1>
+        <form class="upload-form" id="upload-form" enctype="multipart/form-data">
+            <input type="file" name="image" id="image" accept="image/*" required class="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            <button type="submit" class="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600">Upload</button>
+        </form>
+        <div id="result"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#upload-form').on('submit', function(e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+                $.ajax({
+                    type: 'POST',
+                    url: 'strip/upload/',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        displayColors(response);
+                    },
+                    error: function(response) {
+                        $('#result').text('Error: ' + response.responseText);
+                    }
+                });
+            });
+        });
+
+        function displayColors(colors) {
+            var resultHtml = '<table>';
+            for (var color in colors) {
+                resultHtml += '<tr>';
+                resultHtml += '<th>' + color + '</th>';
+                resultHtml += '<td><div class="color-square" style="background-color: rgb(' + colors[color].join(',') + ');"></div></td>';
+                resultHtml += '<td>' + colors[color].join(', ') + '</td>';
+                resultHtml += '</tr>';
+            }
+            resultHtml += '</table>';
+            $('#result').html(resultHtml);
+        }
+    </script>
+</body>
+</html>
