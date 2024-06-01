@@ -21,19 +21,19 @@ The Urine Strip Color Analyzer is a web application that allows users to upload 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/urine-strip-color-analyzer.git
+   git clone https://github.com/desakash/urine-strip-color-analyzer.git
    ```
 
 2. Navigate to the project directory:
 
    ```bash
-   cd urine-strip-color-analyzer
+   cd urinestrip
    ```
 
 3. Install the dependencies:
 
    ```bash
-   pip install -r requirements.txt
+   pip install opencv
    ```
 
 ### Running the Application
